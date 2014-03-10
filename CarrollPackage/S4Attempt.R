@@ -80,14 +80,13 @@ setMethod("important.variables", "Mined", function(object="Mined"){
     number.of.models <- append(number.of.models, values=ncol(model.combinations[[i]]), after=length(number.of.models))
   }
   #CREATE basic structure of the output matrix
-  output2 <- matrix(NA, nrow=k+2, ncol=sum(number.of.models))
-  rownames(output2) <- c("Intercept", colnames(object@covariates), "R^2")
+  output2 <- matrix(NA, nrow=k+1, ncol=sum(number.of.models))
+  rownames(output2) <- c("Intercept", colnames(object@covariates))
   colnames(output2) <- paste(rep("Model", length=sum(number.of.models)), 1:sum(number.of.models), sep=" ")
   #BEGIN running linear models; start with model using only an intercept
   model.base <- lm(object@depvar ~ 1)
   model.base.pvalues <- summary(model.base)$coef[,4]
   output2[1,1] <- model.base.pvalues
-  r.squared <- summary(model.base)$r.squared  
   count <- 1
   for(i in 1:length(model.combinations)){
     for(j in 1:ncol(model.combinations[[i]])){
@@ -96,12 +95,13 @@ setMethod("important.variables", "Mined", function(object="Mined"){
       model <- lm(object@depvar ~ object@covariates[,c(variable.numbers)])
       pvalues <- summary(model)$coef[,4]
       output2[c(1, variable.numbers + 1),count] <- pvalues
-      r.squared <- append(r.squared, values=summary(model)$r.squared, after=length(r.squared))
     }
   }
-  output2[k+2,] <- r.squared  
-  output <- as.data.frame(output2)
-  output <- round(output, 4)
-  output[is.na(output)] <- ""
+  output <- vector(mode="list")
+  output[[1]] <- round(apply(output2, 1, mean, na.rm=TRUE), 6)
+  output[[2]] <- as.data.frame(output2)
+  output[[2]] <- round(output[[2]], 6)
+  output[[2]][is.na(output[[2]])] <- ""
   return(output)
 })
+important.variables(store1)
