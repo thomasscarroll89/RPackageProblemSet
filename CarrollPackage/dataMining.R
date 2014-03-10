@@ -55,3 +55,5 @@ dataMining <- function(depvar, covariates){
   output[is.na(output)] <- ""
   return(output)
 } 
+class(dataMining(depvar=Y, covariates=cbind(X1, X2, X3)))
+class(lm(Y ~ X1 + X2 + X3)$coef)
