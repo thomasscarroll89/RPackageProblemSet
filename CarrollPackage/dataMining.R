@@ -30,13 +30,13 @@ dataMining <- function(depvar, covariates){
     number.of.models <- append(number.of.models, values=ncol(model.combinations[[i]]), after=length(number.of.models))
   }
   #CREATE basic structure of the output matrix
-  output <- matrix(NA, nrow=k+2, ncol=sum(number.of.models))
-  rownames(output) <- c("Intercept", colnames(covariates), "R^2")
-  colnames(output) <- paste(rep("Model", length=sum(number.of.models)), 1:sum(number.of.models), sep=" ")
+  output2 <- matrix(NA, nrow=k+2, ncol=sum(number.of.models))
+  rownames(output2) <- c("Intercept", colnames(covariates), "R^2")
+  colnames(output2) <- paste(rep("Model", length=sum(number.of.models)), 1:sum(number.of.models), sep=" ")
   #BEGIN running linear models; start with model using only an intercept
   model.base <- lm(depvar ~ 1)
   model.base.coef <- model.base$coef
-  output[1,1] <- model.base.coef
+  output2[1,1] <- model.base.coef
   r.squared <- summary(model.base)$r.squared  
   count <- 1
   for(i in 1:length(model.combinations)){
@@ -45,12 +45,12 @@ dataMining <- function(depvar, covariates){
       variable.numbers <- model.combinations[[i]][,j]
       model <- lm(depvar ~ covariates[,c(variable.numbers)])
       coefficients <- model$coef
-      output[c(1, variable.numbers + 1),count] <- coefficients
+      output2[c(1, variable.numbers + 1),count] <- coefficients
       r.squared <- append(r.squared, values=summary(model)$r.squared, after=length(r.squared))
     }
   }
-  output[k+2,] <- r.squared  
-  output <- as.data.frame(output)
+  output2[k+2,] <- r.squared  
+  output <- as.data.frame(output2)
   output <- round(output, 4)
   output[is.na(output)] <- ""
   return(output)
