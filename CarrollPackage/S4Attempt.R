@@ -104,4 +104,37 @@ setMethod("important.variables", "Mined", function(object="Mined"){
   output[[2]][is.na(output[[2]])] <- ""
   return(output)
 })
-important.variables(store1)
+
+
+
+
+setClass(Class="Mined2",
+         representation = representation(
+           depvar = "numeric", 
+           covariates = "matrix",
+           variable.names = "character"
+         ),    
+         prototype = prototype(
+           depvar = c(), 
+           covariates = matrix(),
+           variable.names = c()
+         )
+)
+
+setValidity("Mined2", function(object){
+  observations <- length(object@depvar)
+  if(length(object@depvar)!=nrow(object@covariates)){
+    return("Number of observations in dependent variable and independent variables are not equal")
+  }
+  if(length(object@variable.names)!=ncol(object@covariates)){
+    return("Number of variable names does not match number of independent variables")
+  }
+})
+
+setMethod("initialize", "Mined2", function(.Object, ...){
+  value = callNextMethod()
+  validObject(value)
+  return(value)
+})
+
+store2 <- new(Class="Mined2", depvar=rnorm(50), covariates=cbind(rnorm(50), runif(50), rnorm(50)), variable.names=c("Variable 1", "Variable 2", "Variable 3"))
