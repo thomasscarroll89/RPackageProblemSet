@@ -1,19 +1,18 @@
-#' Data Mining
+#' Determining the Importance of Variables
 #' 
-#' Takes objects of class \code{Mined} (or any of its subclasses) and runs an OLS regression for every possible combination of variables, and returns a matrix of coefficient estimates for each model, as well as the R^2 value for each model. 
+#' Takes objects of class \code{Mined} (or any of its subclasses) and runs an OLS regression for every possible combination of variables, and returns the p-values  for each of these regressions as well as the "average" p-value that each variable was run in.
 #' 
 #' @param depvar A vector of length n
 #' @param covariates An n-by-k matrix where each column contains the data for a single "independent variable"
 #' 
 #' @author Thomas Carroll: \email{thomasscarroll89@gmail.com}
-#' @rdname dataMining
+#' @rdname importantVariables
 #' @export
-setGeneric("dataMining", function(object="Mined"){
-  standardGeneric("dataMining")
+setGeneric("importantVariables", function(object="Mined"){
+  standardGeneric("importantVariables")
 })
 
-#' @export
-setMethod("dataMining", "Mined", function(object="Mined"){
+setMethod("importantVariables", "Mined", function(object="Mined"){
   k <- ncol(object@covariates) #Let k be the number of predictor variables (not including intercept)
   colnames(object@covariates) <- paste(rep("X", length=k), 1:k, sep="")
   model.combinations <- vector(mode="list") #Create object "model.combinations", which is a list containing all of the different combinations of variables 
@@ -23,28 +22,27 @@ setMethod("dataMining", "Mined", function(object="Mined"){
     number.of.models <- append(number.of.models, values=ncol(model.combinations[[i]]), after=length(number.of.models))
   }
   #CREATE basic structure of the output matrix
-  output2 <- matrix(NA, nrow=k+2, ncol=sum(number.of.models))
-  rownames(output2) <- c("Intercept", colnames(object@covariates), "R^2")
+  output2 <- matrix(NA, nrow=k+1, ncol=sum(number.of.models))
+  rownames(output2) <- c("Intercept", colnames(object@covariates))
   colnames(output2) <- paste(rep("Model", length=sum(number.of.models)), 1:sum(number.of.models), sep=" ")
   #BEGIN running linear models; start with model using only an intercept
   model.base <- lm(object@depvar ~ 1)
-  model.base.coef <- model.base$coef
-  output2[1,1] <- model.base.coef
-  r.squared <- summary(model.base)$r.squared  
+  model.base.pvalues <- summary(model.base)$coef[,4]
+  output2[1,1] <- model.base.pvalues
   count <- 1
   for(i in 1:length(model.combinations)){
     for(j in 1:ncol(model.combinations[[i]])){
       count <- count + 1
       variable.numbers <- model.combinations[[i]][,j]
       model <- lm(object@depvar ~ object@covariates[,c(variable.numbers)])
-      coefficients <- model$coef
-      output2[c(1, variable.numbers + 1),count] <- coefficients
-      r.squared <- append(r.squared, values=summary(model)$r.squared, after=length(r.squared))
+      pvalues <- summary(model)$coef[,4]
+      output2[c(1, variable.numbers + 1),count] <- pvalues
     }
   }
-  output2[k+2,] <- r.squared  
-  output <- as.data.frame(output2)
-  output <- round(output, 4)
-  output[is.na(output)] <- ""
+  output <- vector(mode="list")
+  output[[1]] <- round(apply(output2, 1, mean, na.rm=TRUE), 6)
+  output[[2]] <- as.data.frame(output2)
+  output[[2]] <- round(output[[2]], 6)
+  output[[2]][is.na(output[[2]])] <- ""
   return(output)
 })
