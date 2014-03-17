@@ -1,0 +1,17 @@
+{
+    "contents" : "#' Data-like object to be used by the dataMining() function\n#' \n#' Objects of class \\code{DataM} contain 2 slots, the first of which contains the values for the dependent variable and the second of which contains a matrix of values for the predictor variables.\n#'\n#' An object of the class `DataM' has the following slots:\n#' \\itemize{\n#' \\item \\code{depvar} The added or subtracted squared values\n#' \\item \\code{covariates} The added or subtracted squared values\n#' }\n#'\n#' @author Thomas Carroll: \\email{thomasscarroll89@gmail.com}\n#' @rdname DataM-class\n#' @export\nsetClass(Class=\"DataM\",\n         representation = representation(\n           depvar = \"numeric\", \n           covariates = \"matrix\"\n         ),    \n         prototype = prototype(\n           depvar = c(), \n           covariates = matrix()\n         )\n)\n\n#' @export\nsetValidity(\"DataM\", function(object){\n  observations <- length(object@depvar)\n  if(length(object@depvar)!=nrow(object@covariates)){\n    return(\"Number of observations in dependent variable and independent variables are not equal\")\n  }\n})\n\n#' @export\nsetMethod(\"initialize\", \"DataM\", function(.Object, ...){\n  value = callNextMethod()\n  validObject(value)\n  return(value)\n})",
+    "created" : 1395089747871.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "4186291052",
+    "id" : "84853AB2",
+    "lastKnownWriteTime" : 1395091402,
+    "path" : "~/GitHub/RPackageProblemSet/MyPackage/R/DataM.R",
+    "project_path" : "R/DataM.R",
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "source_on_save" : false,
+    "type" : "r_source"
+}

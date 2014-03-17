@@ -1,0 +1,11 @@
+Package: MyPackage
+Type: Package
+Title: Performs Data Mining
+Version: 1.0
+Date: 2014-03-17
+Author: Thomas Carroll <thomasscarroll89@gmail.com>
+Maintainer: Thomas Carroll <thomasscarroll89@gmail.com>
+Description: The function is designed to run multiple linear regressions on a
+    given dataset and return the coefficient estimates and the R^2 values from
+    each of these regressions.
+License: What license is it under?

@@ -1,0 +1,10 @@
+exportPattern("^[[:alpha:]]+")
+exportMethods(
+    "dataMining",
+    "importantVariables",
+    "initialize" 
+)
+exportClasses(
+    "Mined",
+     "Mined2" 
+)

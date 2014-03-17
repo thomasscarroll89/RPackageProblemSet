@@ -1,0 +1,11 @@
+Package: CarrollPack
+Type: Package
+Title: Data Mining
+Version: 1.0
+Date: 2014-03-11
+Author: Thomas Carroll
+Maintainer: Thomas Carroll <thomasscarroll89@gmail.com>
+Description: Takes data supplied by user and runs OLS regressions for every possible combination of independent variables; 
+	then it returns a matrix containing all of the coefficient estimates and R^2 values for each of the regressions.
+License: GPL (>= 2)
+Depends: methods

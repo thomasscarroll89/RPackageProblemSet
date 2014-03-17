@@ -1,0 +1,6 @@
+X1 <- rnorm(100, 50, 20)
+X2 <- runif(100)
+X3 <- rnorm(100, 0, 10)
+Y <- 12 + 3*X1 - 6*X2 + rnorm(100)
+test1 <- new(Class="Mined", depvar=Y, covariates=c(X1, X2, X3))
+importantVariables(test1)
