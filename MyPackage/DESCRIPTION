@@ -7,5 +7,6 @@ Author: Thomas Carroll <thomasscarroll89@gmail.com>
 Maintainer: Thomas Carroll <thomasscarroll89@gmail.com>
 Description: The function is designed to run multiple linear regressions on a
     given dataset and return the coefficient estimates and the R^2 values from
-    each of these regressions.
-License: What license is it under?
+    each of these regressions. The function does not work if any of the
+    variables are factors.
+License: GPL (>= 2)
