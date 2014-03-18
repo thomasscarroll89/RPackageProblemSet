@@ -1,0 +1,1 @@
+Example Demo file for the dataMining and importantVariables functions. Also includes example code for creating a new DataM object, as well as examples of the modified plot, print, and show methods for objects of class DataM. Finally, also includes getMethod commands for these three modified generic functions. 
